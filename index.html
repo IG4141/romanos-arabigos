@@ -1,39 +1,118 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Conversor Romano a Arábigo</title>
-<style>
-body { font-family: Arial, sans-serif; margin: 40px; }
-input, button { font-size: 16px; padding: 5px; }
-p { font-size: 18px; margin-top: 10px; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor Romano ↔ Arábigo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f4f6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 { color: #333; }
+        .container {
+            background: white;
+            padding: 20px 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        input {
+            padding: 10px;
+            width: 200px;
+            margin: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 8px;
+            background-color: #2563eb;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover { background-color: #1d4ed8; }
+        #resultado { margin-top: 20px; font-weight: bold; }
+    </style>
 </head>
 <body>
-<h1>Conversor Romano → Arábigo</h1>
-<input type="text" id="romano" placeholder="Escribí un número romano">
-<button onclick="convertir()">Convertir</button>
-<p>Resultado: <span id="resultado"></span></p>
+    <div class="container">
+        <h1>Conversor Romano ↔ Arábigo</h1>
 
-<script>
-// Misma función que en Node
-function romanoAArabe(romano) {
-    const valores = { I:1, V:5, X:10, L:50, C:100, D:500, M:1000 };
-    let total = 0, prev = 0;
-    for (let i = romano.length - 1; i >= 0; i--) {
-        const valor = valores[romano[i].toUpperCase()];
-        if (!valor) return "Número inválido";
-        if (valor < prev) total -= valor;
-        else total += valor;
-        prev = valor;
-    }
-    return total;
-}
+        <input type="text" id="entrada" placeholder="Ej: IX o 24">
+        <br>
 
-function convertir() {
-    const romano = document.getElementById('romano').value;
-    document.getElementById('resultado').textContent = romanoAArabe(romano);
-}
-</script>
+        <button onclick="convertirARabigo()">Romano → Arábigo</button>
+        <button onclick="convertirARomano()">Arábigo → Romano</button>
+
+        <div id="resultado"></div>
+    </div>
+
+    <script>
+        function romanoAArabe(romano) {
+            const valores = {'I':1,'V':5,'X':10,'L':50,'C':100,'D':500,'M':1000};
+            let total = 0, prev = 0;
+            for (let i = romano.length - 1; i >= 0; i--) {
+                const valor = valores[romano[i].toUpperCase()];
+                if (!valor) return "Error: símbolo no válido.";
+                total += valor < prev ? -valor : valor;
+                prev = valor;
+            }
+            return total;
+        }
+
+        function arabeARomano(numero) {
+            numero = parseInt(numero);
+            if (isNaN(numero) || numero <= 0 || numero >= 4000) 
+                return "Número inválido (1 - 3999)";
+            const valores = [
+                { valor: 1000, simbolo: "M" },
+                { valor: 900, simbolo: "CM" },
+                { valor: 500, simbolo: "D" },
+                { valor: 400, simbolo: "CD" },
+                { valor: 100, simbolo: "C" },
+                { valor: 90, simbolo: "XC" },
+                { valor: 50, simbolo: "L" },
+                { valor: 40, simbolo: "XL" },
+                { valor: 10, simbolo: "X" },
+                { valor: 9, simbolo: "IX" },
+                { valor: 5, simbolo: "V" },
+                { valor: 4, simbolo: "IV" },
+                { valor: 1, simbolo: "I" }
+            ];
+            let resultado = "";
+            for (let i = 0; i < valores.length; i++) {
+                while (numero >= valores[i].valor) {
+                    resultado += valores[i].simbolo;
+                    numero -= valores[i].valor;
+                }
+            }
+            return resultado;
+        }
+
+        function convertirARabigo() {
+            const valor = document.getElementById("entrada").value;
+            const resultado = romanoAArabe(valor);
+            document.getElementById("resultado").textContent = 
+                `Resultado: ${resultado}`;
+        }
+
+        function convertirARomano() {
+            const valor = document.getElementById("entrada").value;
+            const resultado = arabeARomano(valor);
+            document.getElementById("resultado").textContent = 
+                `Resultado: ${resultado}`;
+        }
+    </script>
 </body>
 </html>
