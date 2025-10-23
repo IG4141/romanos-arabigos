@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Conversor Romano a Arábigo</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 40px; }
+input, button { font-size: 16px; padding: 5px; }
+p { font-size: 18px; margin-top: 10px; }
+</style>
+</head>
+<body>
+<h1>Conversor Romano → Arábigo</h1>
+<input type="text" id="romano" placeholder="Escribí un número romano">
+<button onclick="convertir()">Convertir</button>
+<p>Resultado: <span id="resultado"></span></p>
+
+<script>
+// Misma función que en Node
+function romanoAArabe(romano) {
+    const valores = { I:1, V:5, X:10, L:50, C:100, D:500, M:1000 };
+    let total = 0, prev = 0;
+    for (let i = romano.length - 1; i >= 0; i--) {
+        const valor = valores[romano[i].toUpperCase()];
+        if (!valor) return "Número inválido";
+        if (valor < prev) total -= valor;
+        else total += valor;
+        prev = valor;
+    }
+    return total;
+}
+
+function convertir() {
+    const romano = document.getElementById('romano').value;
+    document.getElementById('resultado').textContent = romanoAArabe(romano);
+}
+</script>
+</body>
+</html>
