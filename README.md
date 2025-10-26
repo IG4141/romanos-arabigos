@@ -21,6 +21,10 @@ node index.js
 
 ##  Navegador
 
+La versión web está alojada gratuitamente en Vercel.
+
+Para abrir localmente:
+
 * Abrir `index.html`
 * Ingresar número romano o arábigo
 * Hacer clic en el botón correspondiente
